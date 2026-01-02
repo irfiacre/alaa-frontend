@@ -123,4 +123,4 @@ def build_article_dataset() -> list:
 if __name__=="__main__":
     result = build_article_dataset()
     df = pd.DataFrame(result)
-    df.to_csv(f'{DATASET_DIR}/law_dataset.csv', index=False)
+    df.to_csv(f'{DATASET_DIR}/offences_and_penalties_in_general_2018_dataset.csv', index=False)
