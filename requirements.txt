@@ -2,3 +2,4 @@ enchant-2
 pandas
 pypdf
 transformers
+huggingface-hub
