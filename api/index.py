@@ -1,10 +1,11 @@
 from fastapi import FastAPI
-from api.backend.main import ask_question
-from api.backend.utils.helpers import format_statement_data
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from fastapi.responses import StreamingResponse
 
-app = FastAPI(docs_url="/api/py/docs", openapi_url="/api/py/openapi.json")
+from api.backend.main import ask_question, sse_ask_question
+
+app = FastAPI(docs_url="/api/docs", openapi_url="/api/openapi.json")
 
 origins = ['*']
 
@@ -19,11 +20,18 @@ app.add_middleware(
 class QuestionRequest (BaseModel):
     question: str
 
-@app.get("/api/py/statement/")
+@app.get("/api/health-check/")
 def hello_fast_api():
-    return {"result": format_statement_data()}
+    return {"message": "API is running successfully"}
 
-@app.post("/api/py/ask/")
-def hello_fast_api(req: QuestionRequest):
+@app.post("/api/chat/")
+def instant_chat_with_model(req: QuestionRequest):
     response = ask_question(req.question)
     return {"answer": response}
+
+@app.post("/api/sse/")
+async def sse_chat_with_model(req: QuestionRequest):
+    return StreamingResponse(
+        sse_ask_question(req.question),
+        media_type="text/event-stream"
+    )

@@ -1,24 +1,43 @@
-from langchain_ollama.llms import OllamaLLM
-from langchain_core.prompts import ChatPromptTemplate
-from api.backend.utils.vector import retriever
+import os, asyncio
 
-model = OllamaLLM(model="llama3.2")
+from langchain_ollama.llms import OllamaLLM
+from pydantic import BaseModel
+# from api.backend.utils.vector import retriever
+from dotenv import load_dotenv
+from langchain.agents import create_agent
+from langchain.agents.structured_output import ToolStrategy
+
+
+load_dotenv()
+
+model_name = os.getenv("BASE_MODEL_NAME")
+model = OllamaLLM(model=model_name)
 
 template = """
-You are a financial expert in analyzing and answering questions about any bank statement
+You are a expert legal consultant in Rwanda that can answer questions about the Rwandan laws and regulations.
 
-Here are some bank statement transaction records: {records}
-
-Here is a question to answer: {question}, Please format the response in an easy to parse markdown.
+Please answer the user's question and format the response in an easy to parse markdown.
 """
-
-prompt = ChatPromptTemplate.from_template(template)
-chain = prompt | model
+class AiResponse(BaseModel):
+    answer: str
 
 def ask_question(question: str) -> str:
-    result = chain.invoke({
-        "records": retriever.invoke(question),
-        "question": question
-    })
-
+    """
+    Function to directly call the model and print the generated response.
+    """
+    agent = create_agent(
+        model=model,
+        system_prompt=template, 
+        # response_format=ToolStategy(AiResponse)
+    )
+    result = agent.invoke({"messages": [{"role": "user","content": question}]})
     return result
+
+async def sse_ask_question(question: str):
+    """
+    An async generator that yields messages as the AI outputs them.
+    """
+    agent = create_agent(model=model, tools=[], system_prompt=template)
+    for chunk in agent.stream({"messages": [{"role": "user", "content": question}]}, stream_mode="updates"):
+        for _, data in chunk.items():
+            yield data['messages'][-1].content_blocks['text']

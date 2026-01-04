@@ -1,5 +1,11 @@
-enchant-2
+pyenchant
 pandas
 pypdf
 transformers
 huggingface-hub
+langchain 
+langchain-ollama 
+# langchain-chroma
+dotenv
+fastapi
+uvicorn[standard]
