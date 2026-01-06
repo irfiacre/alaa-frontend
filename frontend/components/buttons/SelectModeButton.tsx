@@ -1,16 +1,24 @@
 import { Icon } from "@iconify/react";
 import React from "react";
 
-const SelectModeButton = () => {
+const SelectModeButton = ({
+  value,
+  onSelect,
+}: {
+  value: string;
+  onSelect: (selected: string) => void;
+}) => {
   return (
-    <div>
+    <div className="flex flex-row items-center justify-center text-primary px-3 py-2.5">
+      <Icon icon={value == "thinking" ? "flowbite:brain-outline" :"mynaui:lightning-solid"} fontSize={24} />
       <select
         name="model"
         id="model"
-        className="bg-inherit w-full px-3 py-2.5 bg-neutral-secondary-medium text-heading rounded-base outline-none shadow-xs placeholder:text-body text-primary font-medium"
-        defaultValue="think"
+        className="bg-inherit w-full px-2 bg-neutral-secondary-medium text-heading rounded-base outline-none shadow-xs placeholder:text-body font-medium"
+        value={value}
+        onChange={(e) => onSelect(e.target.value)}
       >
-        <option value="think">Thinking</option>
+        <option value="thinking">Thinking</option>
         <option value="fast">Fast</option>
       </select>
     </div>
