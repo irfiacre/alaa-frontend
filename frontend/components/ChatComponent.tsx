@@ -90,7 +90,7 @@ const ChatComponent = ({
         transition={{ delay: 0.5 }}
         className="text-white/50 p-2 text-sm text-center"
       >
-        <span className="font-thin">
+        <span className="font-thin max-md:text-xs">
           Please note that this model was trained using the
           <Link
             href="https://www.minijust.gov.rw/laws"

@@ -123,7 +123,7 @@ export default function ChatPage() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
-      className="flex flex-col h-screen bg-chat-background  py-12 px-20"
+      className="flex flex-col h-screen bg-chat-background py-12 px-20 max-md:px-5 max-md:py-0"
     >
       <TopNavigation />
       <div className="flex-1 overflow-y-auto px-4 py-6">

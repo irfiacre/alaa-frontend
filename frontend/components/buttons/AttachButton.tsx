@@ -28,7 +28,7 @@ const AttachButton = ({
       />
       <label
         htmlFor="file-upload"
-        className={`flex items-center justify-center px-4 py-2 rounded-2xl border cursor-pointer ${darkMode ? "border-white/10 text-white hover:bg-white/50":"border-black/10 hover:bg-white/50"} transition-colors`}
+        className={`flex items-center justify-center px-4 py-2 rounded-2xl border cursor-pointer ${darkMode ? "border-white/10 text-white hover:bg-white/50":"border-black/10 hover:bg-white/50"} transition-colors max-md:px-2.5 max-md:py-1`}
       >
         <Icon icon="tdesign:attach" />
         <span className="font-medium px-2">

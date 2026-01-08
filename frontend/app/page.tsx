@@ -7,6 +7,7 @@ import ChatComponent from "@/components/ChatComponent";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
 import TopNavigation from "@/components/TopNavigation";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   const router = useRouter();
@@ -27,72 +28,25 @@ export default function Home() {
         transition={{ duration: 0.3 }}
         className="min-h-screen relative overflow-hidden bg-chat-text-field-background-dark"
       >
-        <div className="relative z-10 min-h-screen py-12 px-20">
+        <div className="relative z-10 min-h-screen py-12 px-20 max-md:px-5 max-md:py-0 max-md:space-y-5">
           <TopNavigation />
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="w-full flex flex-col items-center justify-center py-20 space-y-10"
+            className="w-full flex flex-col items-center justify-center md:py-20 md:space-y-10 space-y-5"
           >
             <div className="w-full flex items-center justify-center flex-col text-white">
-              <h1 className="text-7xl py-5">The first AI</h1>
-              <h1 className="text-7xl py-5 text-primary">
+              <h1 className="text-7xl md:py-5 py-2.5 max-md:text-5xl">The first AI</h1>
+              <h1 className="text-7xl md:py-5 py-2.5 text-primary max-md:text-5xl">
                 Legal Consultant
               </h1>
             </div>
-            <div className="w-[80%]">
+            <div className="md:w-[70%]">
               <ChatComponent handleSend={handleSend} />
             </div>
           </motion.div>
-          <div className="absolute bottom-0 flex flex-col items-center justify-center w-full -mx-20">
-            <div className="w-full text-center text-white/80 flex flex-row items-center justify-center gap-5">
-            <span>Iradukunda</span>
-            <Link
-              href="https://www.linkedin.com/in/irfiacre/"
-              target="_blank"
-              className="p-2 cursor-pointer hover:text-[#0077B5] hover:bg-white hover:rounded-full"
-            >
-              <Icon icon="ri:linkedin-fill" fontSize={20} />
-            </Link>
-
-            <Link
-              href="https://github.com/irfiacre"
-              target="_blank"
-              className="p-2 cursor-pointer hover:bg-white hover:text-black hover:rounded-full"
-            >
-              <Icon icon="mynaui:github" fontSize={20} />
-            </Link>
-
-            <Link
-              href="https://x.com/koraarw"
-              target="_blank"
-              className="p-2 cursor-pointer hover:bg-white hover:text-black hover:rounded-full"
-            >
-              <Icon icon="codicon:twitter" fontSize={20} />
-            </Link>
-
-            <Link
-              href="https://www.youtube.com/@iradukunda-dev"
-              target="_blank"
-              className="p-2 cursor-pointer hover:text-[#FF0000] hover:bg-white hover:rounded-full"
-            >
-              <Icon icon="mynaui:youtube" fontSize={20} />
-            </Link>
-
-            <Link
-              href="https://www.instagram.com/irfiacre/"
-              target="_blank"
-              className="p-2 cursor-pointer hover:text-[#833AB4] hover:bg-white hover:rounded-full"
-            >
-              <Icon icon="mdi:instagram" fontSize={20} />
-            </Link>
-          
-          </div>
-          <p className="text-center text-white/50 text-sm py-10">
-            Made in Rwanda
-          </p>
-          </div>
+          <Footer />
           
         </div>
         <div className="absolute top-0 w-full h-full">
