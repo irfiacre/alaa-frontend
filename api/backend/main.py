@@ -35,9 +35,24 @@ def ask_question(question: str) -> str:
 
 async def sse_ask_question(question: str):
     """
-    An async generator that yields messages as the AI outputs them.
+    An async generator that yields SSE-formatted messages as the AI outputs them.
     """
     agent = create_agent(model=model, tools=[], system_prompt=template)
-    for chunk in agent.stream({"messages": [{"role": "user", "content": question}]}, stream_mode="updates"):
-        for _, data in chunk.items():
-            yield data['messages'][-1].content_blocks['text']
+    
+    try:
+        for chunk in agent.stream(
+            {"messages": [{"role": "user", "content": question}]}, 
+            stream_mode="updates"
+        ):
+            for _, data in chunk.items():
+                # Extract the text content
+                text_content = data['messages'][-1].content_blocks.get('text', '')
+                # Format as SSE event
+                yield f"data: {text_content}\n\n"
+        
+        # Send completion signal
+        yield "data: [DONE]\n\n"
+        
+    except Exception as e:
+        # Send error to client
+        yield f"data: [ERROR] {str(e)}\n\n"
