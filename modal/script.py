@@ -83,6 +83,7 @@ class LawDeepSeekModel:
         if max_new_tokens is None:
             max_new_tokens = min(self.model.config.max_position_embeddings - inputs['input_ids'].shape[1], 8192)
         
+        
         outputs = self.model.generate(
             **inputs,
             max_new_tokens=max_new_tokens,
