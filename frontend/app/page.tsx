@@ -15,7 +15,7 @@ export default function Home() {
   const handleSend = (message: string, file: File | null) => {    
     if (message.trim() || file) {
       // Navigate to chat page with transition
-      router.push("/chat");
+      router.push("/chat", );
     }
   };
 

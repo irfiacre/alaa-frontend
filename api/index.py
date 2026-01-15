@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from fastapi.responses import StreamingResponse
 
-from api.backend.main import ask_question, sse_ask_question
+from api.backend.main import sse_ask_question
 
 app = FastAPI(docs_url="/api/docs", openapi_url="/api/openapi.json")
 
@@ -23,11 +23,6 @@ class QuestionRequest (BaseModel):
 @app.get("/api/health-check/")
 def hello_fast_api():
     return {"message": "API is running successfully"}
-
-@app.post("/api/chat/")
-def instant_chat_with_model(req: QuestionRequest):
-    response = ask_question(req.question)
-    return {"answer": response}
 
 @app.post("/api/sse/")
 async def sse_chat_with_model(req: QuestionRequest):

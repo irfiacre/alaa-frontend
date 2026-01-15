@@ -99,6 +99,46 @@ class LawDeepSeekModel:
         response = self.tokenizer.decode(generated_tokens, skip_special_tokens=True)
         return response
     
+    @modal.method()
+    def generate_stream(self, prompt: str, max_new_tokens: int = None, temperature: float = 0.7):
+        """Generate text from a prompt with streaming"""
+        from transformers import TextIteratorStreamer
+        from threading import Thread
+        
+        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.model.device)
+        
+        # If max_new_tokens is None, use model's max length
+        if max_new_tokens is None:
+            max_new_tokens = min(self.model.config.max_position_embeddings - inputs['input_ids'].shape[1], 8192)
+        
+        # Create streamer
+        streamer = TextIteratorStreamer(
+            self.tokenizer,
+            skip_prompt=True,  # Don't include the input prompt in output
+            skip_special_tokens=True
+        )
+        
+        # Generation kwargs
+        generation_kwargs = dict(
+            **inputs,
+            max_new_tokens=max_new_tokens,
+            temperature=temperature,
+            do_sample=True,
+            top_p=0.9,
+            repetition_penalty=1.1,
+            pad_token_id=self.tokenizer.eos_token_id,
+            eos_token_id=self.tokenizer.eos_token_id,
+            streamer=streamer,
+        )
+        
+        # Start generation in a separate thread
+        thread = Thread(target=self.model.generate, kwargs=generation_kwargs)
+        thread.start()
+        
+        # Yield tokens as they're generated
+        for text in streamer:
+            yield text
+    
     @modal.fastapi_endpoint(method="POST")  # Renamed from web_endpoint
     def web_generate(self, item: dict):
         """Web endpoint for API access"""
@@ -111,15 +151,3 @@ class LawDeepSeekModel:
         
         response = self.generate(prompt, max_new_tokens, temperature)
         return {"response": response}
-
-
-# Local test function
-@app.local_entrypoint()
-def main():
-    """Test the model locally"""
-    model = LawDeepSeekModel()
-    
-    test_prompt = "What are the key elements of a valid contract?"
-    print(f"Prompt: {test_prompt}")
-    result = model.generate.remote(test_prompt)
-    print(f"Response: {result}")
