@@ -7,19 +7,20 @@ export interface MessageStructure {
   id: string;
   text: string;
   isUser: boolean;
-  timestamp: Date;
 }
 
-const MessageBubble = ({ message }: { message: MessageStructure }) => {
+const MessageBubble = ({
+  message,
+  isTyping,
+}: {
+  message: MessageStructure;
+  isTyping?: boolean;
+}) => {
   const [copiedText, setCopiedText] = useState<boolean>(false);
 
   return (
-    <motion.div
+    <div
       key={message.id}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.2 }}
       className={`flex ${message.isUser ? "justify-end" : "justify-start"} `}
     >
       <div
@@ -33,7 +34,7 @@ const MessageBubble = ({ message }: { message: MessageStructure }) => {
           <Markdown>{message.text}</Markdown>
         </div>
 
-        {!message.isUser && (
+        {!message.isUser && !isTyping && (
           <button
             className="text-[#4F555C] py-2 flex flex-row items-center justify-center gap-2"
             title="Copy to clipboard"
@@ -58,7 +59,7 @@ const MessageBubble = ({ message }: { message: MessageStructure }) => {
           </button>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 };
 

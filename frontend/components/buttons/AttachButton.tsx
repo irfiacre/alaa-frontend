@@ -6,13 +6,15 @@ const AttachButton = ({
   handleFileChange,
   setFile,
   setFileName,
-  darkMode
+  darkMode,
+  disabled,
 }: {
   fileName: string;
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   setFile: (file: File | null) => void;
   setFileName: (text: string) => void;
-  darkMode?: boolean
+  darkMode?: boolean;
+  disabled?: boolean;
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -25,15 +27,18 @@ const AttachButton = ({
         className="hidden"
         id="file-upload"
         accept=".pdf,.doc,.docx,.txt"
+        disabled={disabled}
       />
       <label
         htmlFor="file-upload"
-        className={`flex items-center justify-center px-4 py-2 rounded-2xl border cursor-pointer ${darkMode ? "border-white/10 text-white hover:bg-white/50":"border-black/10 hover:bg-white/50"} transition-colors max-md:px-2.5 max-md:py-1`}
+        className={`flex items-center justify-center px-4 py-2 rounded-2xl border cursor-pointer ${
+          darkMode
+            ? "border-white/10 text-white hover:bg-white/50"
+            : "border-black/10 hover:bg-white/50"
+        } transition-colors max-md:px-2.5 max-md:py-1`}
       >
         <Icon icon="tdesign:attach" />
-        <span className="font-medium px-2">
-          {fileName || "Attach"}
-        </span>
+        <span className="font-medium px-2">{fileName || "Attach"}</span>
       </label>
       {fileName && (
         <div className="mt-2 flex items-center justify-between p-2 bg-white/30 rounded-lg">
@@ -47,6 +52,7 @@ const AttachButton = ({
               }
             }}
             className="text-red-500 hover:text-red-700 ml-2"
+            disabled={disabled}
           >
             <svg
               className="w-5 h-5"

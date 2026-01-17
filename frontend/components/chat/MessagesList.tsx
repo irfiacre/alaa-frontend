@@ -18,22 +18,25 @@ const MessagesList = ({
     id: Math.floor(Math.random() * 10000 + 1).toString(),
     text: `${currentMessage}`,
     isUser: false,
-    timestamp: new Date(),
   };
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <AnimatePresence>
-        {messages.map((message) => (
-          <MessageBubble key={message.id} message={message} />
-        ))}
-        {currentMessage && (
-          <MessageBubble
-            key={currentMessageObj.id}
-            message={currentMessageObj}
-          />
-        )}
-      </AnimatePresence>
-      {isTyping && <TypingIndicator />}
+      <div>
+        {/* <AnimatePresence> */}
+          {messages.map((message) => (
+            <MessageBubble key={message.id} message={message} />
+          ))}
+          {currentMessage && (
+            <MessageBubble
+              key={currentMessageObj.id}
+              message={currentMessageObj}
+              isTyping={isTyping}
+            />
+          )}
+        {/* </AnimatePresence> */}
+      </div>
+
+      {isTyping && !currentMessage && <TypingIndicator />}
       <div ref={messagesEndRef} />
     </div>
   );

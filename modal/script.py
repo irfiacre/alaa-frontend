@@ -22,7 +22,7 @@ cache_vol = modal.Volume.from_name("law-model-cache", create_if_missing=True)
 # Create a class to handle model inference
 @app.cls(
     image=image,
-    gpu="A10G",  # Using string syntax instead of modal.gpu.A10G()
+    gpu="L4",  # Using string syntax instead of modal.gpu.A10G()
     timeout=600,
     scaledown_window=300,  # Renamed from container_idle_timeout
     min_containers=0,  # Renamed from keep_warm

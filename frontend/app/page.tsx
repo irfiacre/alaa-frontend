@@ -2,20 +2,28 @@
 
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import LogoComponent from "@/components/LogoComponent";
 import ChatComponent from "@/components/ChatComponent";
-import Link from "next/link";
-import { Icon } from "@iconify/react";
 import TopNavigation from "@/components/TopNavigation";
 import Footer from "@/components/Footer";
+import { MessageStructure } from "@/components/chat/MessageBubble";
+import { generateRandomUUID, generateTextID } from "@/components/utils";
 
 export default function Home() {
   const router = useRouter();
 
-  const handleSend = (message: string, file: File | null) => {    
+  const handleSend = (message: string, file: File | null): any => {
     if (message.trim() || file) {
-      // Navigate to chat page with transition
-      router.push("/chat", );
+      const conversationId = generateRandomUUID();
+      const initialMessage: MessageStructure = {
+        id: generateTextID(message),
+        text: message,
+        isUser: true,
+      };
+      localStorage.setItem(
+        `${conversationId}`,
+        JSON.stringify([initialMessage])
+      );
+      router.push(`/chat?id=${conversationId}`);
     }
   };
 
@@ -37,7 +45,9 @@ export default function Home() {
             className="w-full flex flex-col items-center justify-center md:py-20 md:space-y-10 space-y-5"
           >
             <div className="w-full flex items-center justify-center flex-col text-white">
-              <h1 className="text-7xl md:py-5 py-2.5 max-md:text-5xl">The first AI</h1>
+              <h1 className="text-7xl md:py-5 py-2.5 max-md:text-5xl">
+                The first AI
+              </h1>
               <h1 className="text-7xl md:py-5 py-2.5 text-primary max-md:text-5xl">
                 Legal Consultant
               </h1>
@@ -47,7 +57,6 @@ export default function Home() {
             </div>
           </motion.div>
           <Footer />
-          
         </div>
         <div className="absolute top-0 w-full h-full">
           <video

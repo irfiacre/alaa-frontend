@@ -8,9 +8,11 @@ import Link from "next/link";
 const ChatComponent = ({
   handleSend,
   darkMode,
+  isStreaming,
 }: {
   handleSend: (message: string, file: File | null) => Promise<void>;
   darkMode?: boolean;
+  isStreaming?: boolean;
 }) => {
   const [message, setMessage] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -24,7 +26,10 @@ const ChatComponent = ({
       setFileName(selectedFile.name);
     }
   };
-  const handleSendMessage = () => handleSend(message, file);
+  const handleSendMessage = () => {
+    handleSend(message, file)
+    setMessage("")
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -68,18 +73,23 @@ const ChatComponent = ({
         </div>
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-row items-center justify-center gap-5">
-            <SelectModeButton value={aiMode} onSelect={setAiMode} />
+            <SelectModeButton
+              value={aiMode}
+              onSelect={setAiMode}
+              disabled={isStreaming}
+            />
             <AttachButton
               darkMode={darkMode}
               fileName={fileName}
               handleFileChange={handleFileChange}
               setFile={setFile}
               setFileName={setFileName}
+              disabled={isStreaming}
             />
           </div>
           <div>
             <button
-              disabled={!message.trim() && !file}
+              disabled={(!message.trim() && !file) || isStreaming}
               className={`w-full p-2 rounded-full cursor-pointer bg-primary text-white hover:bg-primary/80 hover:text-white/80 ${
                 darkMode
                   ? "disabled:bg-white/10 disabled:text-white/40 disabled:hover:bg-white/10 disabled:hover:text-white/40"
@@ -87,7 +97,10 @@ const ChatComponent = ({
               }`}
               onClick={handleSendMessage}
             >
-              <Icon icon="lucide:arrow-up" fontSize={20} />
+              <Icon
+                icon={isStreaming ? "hugeicons:stop" : "lucide:arrow-up"}
+                fontSize={20}
+              />
             </button>
           </div>
         </div>
