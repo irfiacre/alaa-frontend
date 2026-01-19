@@ -46,7 +46,7 @@ export default function Home() {
           >
             <div className="w-full flex items-center justify-center flex-col text-white">
               <h1 className="text-7xl md:py-5 py-2.5 max-md:text-5xl">
-                The first AI
+                The 
               </h1>
               <h1 className="text-7xl md:py-5 py-2.5 text-primary max-md:text-5xl">
                 Legal Consultant

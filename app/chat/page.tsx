@@ -12,6 +12,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 export default function ChatPage({ params }: any) {
   const [messages, setMessages] = useState<MessageStructure[]>([]);
   const [currentAssistantMessage, setCurrentAssistantMessage] = useState("");
+  const [updateLocalHost, setUpdateLocalHost] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
   const conversationId = searchParams.get("id");
@@ -40,9 +41,15 @@ export default function ChatPage({ params }: any) {
       const initialMessage = messages[0].text;
       handleSend(initialMessage);
     }
-
     scrollToBottom();
   }, [messages, currentAssistantMessage]);
+
+  useEffect(() => {
+    if (updateLocalHost && !currentAssistantMessage) {
+      localStorage.setItem(`${conversationId}`, JSON.stringify(messages));
+      setUpdateLocalHost(false)
+    }
+  }, [updateLocalHost]);
 
   const handleSend = async (text: string, file?: File | null) => {
     if (!text.trim()) return;
@@ -54,6 +61,7 @@ export default function ChatPage({ params }: any) {
         text: text,
         isUser: true,
       };
+
       setMessages((prev) => [...prev, userMessage]);
     }
 
@@ -84,26 +92,34 @@ export default function ChatPage({ params }: any) {
         setCurrentAssistantMessage("");
       },
     });
-    // To do: Add a local stystem a way to update the user's local storage. (should mock output for API)
-    // localStorage.setItem(`${conversationId}`, JSON.stringify(messages));
+    setUpdateLocalHost(true)
   };
 
   return (
     <div className="flex flex-col h-screen bg-chat-background py-12 px-20 max-md:px-5 max-md:py-0">
-      <TopNavigation />
-      <div className="flex-1 overflow-y-auto px-4 py-6">
-        <MessagesList
-          messages={messages}
-          currentMessage={currentAssistantMessage}
-          isTyping={isStreaming}
-          messagesEndRef={messagesEndRef}
-        />
+      <div className="w-full flex items-center justify-center">
+        <div className="w-[70%]">
+          <TopNavigation />
+        </div></div>
+      <div className="flex-1 overflow-y-auto py-6 flex justify-center">
+        <div className="w-[70%]">
+          <MessagesList
+            messages={messages}
+            currentMessage={currentAssistantMessage}
+            isTyping={isStreaming}
+            messagesEndRef={messagesEndRef}
+          />
+        </div>
       </div>
-      <ChatComponent
-        handleSend={handleSend}
-        darkMode
-        isStreaming={isStreaming}
-      />
+      <div className="w-full flex items-center justify-center">
+        <div className="w-[70%]">
+          <ChatComponent
+            handleSend={handleSend}
+            darkMode
+            isStreaming={isStreaming}
+          />
+        </div>
+      </div>
     </div>
   );
 }

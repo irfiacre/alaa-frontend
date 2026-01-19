@@ -20,7 +20,7 @@ const MessagesList = ({
     isUser: false,
   };
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="mx-auto space-y-6">
       <div>
         {/* <AnimatePresence> */}
           {messages.map((message) => (

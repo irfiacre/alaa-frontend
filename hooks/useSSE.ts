@@ -49,7 +49,7 @@ export const useStreamingChat = () => {
 
           if (done) {
             setIsStreaming(false);
-            options?.onComplete?.(fullMessage);
+            // options?.onComplete?.(fullMessage);
             break;
           }
 
