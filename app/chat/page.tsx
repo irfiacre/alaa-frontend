@@ -6,8 +6,9 @@ import MessagesList from "@/components/chat/MessagesList";
 import ChatComponent from "@/components/ChatComponent";
 import TopNavigation from "@/components/TopNavigation";
 import { useStreamingChat } from "@/hooks/useSSE";
-import { generateRandomUUID, generateTextID } from "@/components/utils";
+import { generateRandomUUID, generateTextID } from "@/utils/utils";
 import { useSearchParams, useRouter } from "next/navigation";
+import { find_relevant_cases } from "@/utils/tools";
 
 export default function ChatPage({ params }: any) {
   const [messages, setMessages] = useState<MessageStructure[]>([]);
@@ -25,14 +26,20 @@ export default function ChatPage({ params }: any) {
   };
 
   useEffect(() => {
-    if (!conversationId) {
-      router.push("/");
-    }
-    const savedConversation = localStorage.getItem(`${conversationId}`);
-    if (savedConversation) {
-      const conversationHistory = JSON.parse(savedConversation);
-      setMessages(conversationHistory);
-    }
+    (async () => {
+      const result = await find_relevant_cases('stealing')
+      console.log("========", result);
+
+    })()
+
+    // if (!conversationId) {
+    //   router.push("/");
+    // }
+    // const savedConversation = localStorage.getItem(`${conversationId}`);
+    // if (savedConversation) {
+    //   const conversationHistory = JSON.parse(savedConversation);
+    //   setMessages(conversationHistory);
+    // }
   }, []);
 
   useEffect(() => {

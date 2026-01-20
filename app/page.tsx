@@ -6,7 +6,7 @@ import ChatComponent from "@/components/ChatComponent";
 import TopNavigation from "@/components/TopNavigation";
 import Footer from "@/components/Footer";
 import { MessageStructure } from "@/components/chat/MessageBubble";
-import { generateRandomUUID, generateTextID } from "@/components/utils";
+import { generateRandomUUID, generateTextID } from "@/utils/utils";
 
 export default function Home() {
   const router = useRouter();
@@ -46,7 +46,7 @@ export default function Home() {
           >
             <div className="w-full flex items-center justify-center flex-col text-white">
               <h1 className="text-7xl md:py-5 py-2.5 max-md:text-5xl">
-                The 
+                Your Legal On the Go! 
               </h1>
               <h1 className="text-7xl md:py-5 py-2.5 text-primary max-md:text-5xl">
                 Legal Consultant
