@@ -8,7 +8,7 @@ import TopNavigation from "@/components/TopNavigation";
 import { useStreamingChat } from "@/hooks/useSSE";
 import { generateRandomUUID, generateTextID } from "@/utils/utils";
 import { useSearchParams, useRouter } from "next/navigation";
-import { find_relevant_cases } from "@/utils/tools";
+import { find_relevant_cases, read_pdf_document } from "@/utils/tools";
 
 export default function ChatPage({ params }: any) {
   const [messages, setMessages] = useState<MessageStructure[]>([]);
@@ -27,8 +27,8 @@ export default function ChatPage({ params }: any) {
 
   useEffect(() => {
     (async () => {
-      const result = await find_relevant_cases('stealing')
-      console.log("========", result);
+      const result = await read_pdf_document('https://files.amategeko.gov.rw/documents-7872/PROSECUTOR%20v.%20URAYENEZA_WITH_HYPERLINK.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ocrminioadmin%2F20260120%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260120T202804Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=15d68c36b6648addbd5d20053bd80581d8878fcabd92491a841077954fafb9d5')
+      console.log("========", result)
 
     })()
 

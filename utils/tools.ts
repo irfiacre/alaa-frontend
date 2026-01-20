@@ -1,3 +1,4 @@
+
 const BASE_URL = "https://apis.amategeko.gov.rw/v1/site/documents"
 const SEARCH_RESULT_LIMIT = 2
 
@@ -30,6 +31,21 @@ export const find_relevant_cases = async (search_term: string) => {
     return result;
 }
 
-export const read_pdf_document = async (documentId: string) => {
-    // To implement tool
+export const read_pdf_document = async (documentUrl: string) => {
+    try {
+        let response: any = await fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/extract-text/`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ file_url: documentUrl })
+            }
+        );
+
+        response = await response.json()
+        return response.message
+    } catch (error) {
+        console.error('Error reading PDF:', error);
+        return "";
+    }
 }
