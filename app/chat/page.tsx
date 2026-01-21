@@ -8,7 +8,6 @@ import TopNavigation from "@/components/TopNavigation";
 import { useStreamingChat } from "@/hooks/useSSE";
 import { generateRandomUUID, generateTextID } from "@/utils/utils";
 import { useSearchParams, useRouter } from "next/navigation";
-import { find_relevant_cases, read_pdf_document } from "@/utils/tools";
 
 export default function ChatPage({ params }: any) {
   const [messages, setMessages] = useState<MessageStructure[]>([]);
@@ -26,20 +25,14 @@ export default function ChatPage({ params }: any) {
   };
 
   useEffect(() => {
-    (async () => {
-      const result = await read_pdf_document('https://files.amategeko.gov.rw/documents-7872/PROSECUTOR%20v.%20URAYENEZA_WITH_HYPERLINK.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ocrminioadmin%2F20260120%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260120T202804Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=15d68c36b6648addbd5d20053bd80581d8878fcabd92491a841077954fafb9d5')
-      console.log("========", result)
-
-    })()
-
-    // if (!conversationId) {
-    //   router.push("/");
-    // }
-    // const savedConversation = localStorage.getItem(`${conversationId}`);
-    // if (savedConversation) {
-    //   const conversationHistory = JSON.parse(savedConversation);
-    //   setMessages(conversationHistory);
-    // }
+    if (!conversationId) {
+      router.push("/");
+    }
+    const savedConversation = localStorage.getItem(`${conversationId}`);
+    if (savedConversation) {
+      const conversationHistory = JSON.parse(savedConversation);
+      setMessages(conversationHistory);
+    }
   }, []);
 
   useEffect(() => {
@@ -100,7 +93,7 @@ export default function ChatPage({ params }: any) {
       },
     });
     setUpdateLocalHost(true)
-  };
+  };  
 
   return (
     <div className="flex flex-col h-screen bg-chat-background py-12 px-20 max-md:px-5 max-md:py-0">
@@ -118,7 +111,7 @@ export default function ChatPage({ params }: any) {
           />
         </div>
       </div>
-      <div className="w-full flex items-center justify-center">
+      <div className="w-full flex items-center justify-center pt-6">
         <div className="w-[70%]">
           <ChatComponent
             handleSend={handleSend}

@@ -1,3 +1,5 @@
+import { handleResearchAgent } from "@/utils/agent";
+import { get_main_agent_instructions } from "@/utils/constants";
 import { useState, useCallback } from "react";
 
 interface StreamingChatOptions {
@@ -13,11 +15,12 @@ export const useStreamingChat = () => {
 
   const sendMessage = useCallback(
     async (question: string, options?: StreamingChatOptions) => {
-      let fullMessage = "";
       const controller = new AbortController();
       setAbortController(controller);
       setIsStreaming(true);
 
+      let fullMessage = "";
+      const researchAgentAnswer = await handleResearchAgent(question);
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/sse/`,
@@ -26,7 +29,7 @@ export const useStreamingChat = () => {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ question }),
+            body: JSON.stringify({ question: get_main_agent_instructions(researchAgentAnswer, question) }),
             signal: controller.signal,
           }
         );

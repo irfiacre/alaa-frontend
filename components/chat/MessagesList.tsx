@@ -22,7 +22,6 @@ const MessagesList = ({
   return (
     <div className="mx-auto space-y-6">
       <div>
-        {/* <AnimatePresence> */}
           {messages.map((message) => (
             <MessageBubble key={message.id} message={message} />
           ))}
@@ -33,7 +32,6 @@ const MessagesList = ({
               isTyping={isTyping}
             />
           )}
-        {/* </AnimatePresence> */}
       </div>
 
       {isTyping && !currentMessage && <TypingIndicator />}
